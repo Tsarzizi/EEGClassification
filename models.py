@@ -9,19 +9,18 @@ class Net(nn.Module):
         self.output_size = output_size
         self.hidden_size = hidden_size
         self.num_layers = num_layers
-
         self.lstm = nn.LSTM(self.input_size, self.hidden_size, self.num_layers, batch_first=True)
+        self.drop = nn.Dropout(0.5)
+        self.bn = nn.BatchNorm1d(self.hidden_size)
         self.fc = nn.Linear(self.hidden_size, self.output_size)
         self.sigmoid = nn.Sigmoid()
 
     def forward(self, x):
         h0 = torch.zeros(self.num_layers, x.size(0), self.hidden_size).to(x.device)
         c0 = torch.zeros(self.num_layers, x.size(0), self.hidden_size).to(x.device)
-
         output, _ = self.lstm(x, (h0, c0))
         output = self.fc(output[:, -1, :])
         output = self.sigmoid(output)
-        output = torch.argmax(output, dim=1)
         return output
 
 
@@ -36,10 +35,11 @@ if __name__ == "__main__":
     lstm = Net(input_size, output_size, hidden_size, num_layers)
 
     # 随机生成输入数据
-    input_data = torch.randn(12, 62, input_size)
+    input_data = torch.randn(12, 62, 48000)
     print(input_data.shape)
 
     # 前向传播
     output = lstm(input_data)
 
     print(type(output[0]))
+

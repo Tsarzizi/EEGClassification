@@ -12,7 +12,7 @@ torch.manual_seed(SEED)
 np.random.seed(SEED)
 random.seed(SEED)
 
-PATH = 'D:\Data\EEG\SEED\\Preprocessed_EEG\\'
+PATH = 'Z:/Data.zip'
 DEVICE = 'cuda' if torch.cuda.is_available() else 'cpu'
 
 BATCH_SIZE = 64

@@ -26,6 +26,7 @@ class Drawer:
                 plt.text(first_index, second_index, self.confusion[second_index][first_index])
         plt.show()
 
+
 if __name__ == '__main__':
     true_label = [1, 1, 1, 1, 2, 0, 0, 2, 0, 1]
     pred_label = [2, 2, 2, 1, 2, 1, 1, 2, 0, 0]
@@ -33,4 +34,3 @@ if __name__ == '__main__':
 
     drawer = Drawer(true_label, pred_label, classes)
     drawer.plot_confusion_matrix()
-

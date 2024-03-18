@@ -1,7 +1,5 @@
 import numpy as np
 import torch
-from matplotlib import pyplot as plt
-from sklearn.metrics import confusion_matrix
 from torch.utils.data import random_split, DataLoader
 
 from mydataset import EEG_Dataset
@@ -12,6 +10,7 @@ def collate_fn(batch):
     target = [item[1] for item in batch]
     temp = np.zeros((len(batch), 62, 200 * 240))
     for i in range(len(batch)):
+        print(f'数据加载中{i}/{len(batch)}')
         if data[i].shape[1] > 200 * 240:
             width = 200 * 240
             temp[i][:, :width] = data[i][:, :width]
@@ -22,6 +21,7 @@ def collate_fn(batch):
     target = np.array(target)
     data = torch.from_numpy(data).float()
     target = torch.from_numpy(target)
+    print('加载完成')
     return data, target
 
 
@@ -37,13 +37,10 @@ def get_dataloader(dataset, batch_size, shuffle=True, collate_fn=collate_fn):
     return train_dataloader, val_dataloader
 
 
-
-
-
-
 if __name__ == '__main__':
-    path = 'D:\Data\EEG\SEED\\Preprocessed_EEG\\'
+    # ZIP文件的路径
+    path = 'Z:/Data.zip'
     eeg = EEG_Dataset(path)
-    t, v = get_dataloader(eeg,1,True, collate_fn)
+    t, v = get_dataloader(eeg, 1, True, collate_fn)
     for d, l in t:
         print(d, l)
